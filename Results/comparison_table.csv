@@ -1,0 +1,6 @@
+Model,Your RMSE (1500 movies),Paper RMSE (17770 movies),Difference,Percentage Difference (%)
+PMF1,1.0114,0.943,0.0684,7.25
+PMF2,0.992,0.9253,0.0667,7.21
+Adaptive PMF,1.0134,0.9197,0.0937,10.19
+Constrained PMF,1.0788,0.9016,0.1772,19.65
+SVD,2.7362,0.9258,1.8104,195.5

@@ -102,6 +102,26 @@ My best model (PMF2) achieved validation RMSE of 0.9920 vs the paper's 0.9253 on
 | Adaptive PMF | 1.0134 |
 | Constrained PMF | 1.0788 |
 
+### Figure 1: All Models Comparison
+
+![All models validation RMSE comparison](Results/figure1_all_models.png)
+
+### Figure 2 Left: Adaptive Priors vs Basic PMF
+
+![Adaptive priors comparison with PMF1 and PMF2](Results/figure2_left_adaptive.png)
+
+### Figure 2 Right: Constrained PMF vs Unconstrained
+
+![Constrained PMF comparison](Results/figure2_right_constrained.png)
+
+### Figure 3: Bar Chart - My Results vs Paper
+
+![Comparison bar chart](Results/figure3_bar_chart_comparison.png)
+
+### Figure 4: Learning Curves for All Models
+
+![Training and validation RMSE over epochs](Results/figure4_learning_curves.png)
+
 ### Training Progress (Validation RMSE by Epoch)
 
 | Epoch | PMF1 | PMF2 | Adaptive | Constrained |
@@ -119,10 +139,9 @@ My best model (PMF2) achieved validation RMSE of 0.9920 vs the paper's 0.9253 on
 | PMF1 | 0.9181 | 1.0114 | 0.0933 |
 | PMF2 | 0.8672 | 0.9920 | 0.1248 |
 | Adaptive | 0.9205 | 1.0134 | 0.0929 |
-| Constrained | 1.0510 | 1.0788 | 0.0278 |
+| Constrained | 1.0510 | 1.0788 | 0.0277 |
 
 > **Key Finding**: PMF2 (low regularization) outperforms PMF1 (high regularization) by **0.0194 RMSE**.
-
 ---
 
 ## Project Structure

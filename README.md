@@ -1,38 +1,80 @@
-# Probabilistic Matrix Factorization for Movie Recommendation
+# Probabilistic Matrix Factorization for Movie Rating Prediction
 
-**Replication of Salakhutdinov & Mnih (2008) - Netflix Prize Paper**
+## Project Description
 
-## 📄 Paper Reference
-Salakhutdinov, R., & Mnih, A. (2008). **Probabilistic Matrix Factorization**. *Neural Information Processing Systems (NIPS)*.
+I built a **Probabilistic Matrix Factorization (PMF)** system to predict user ratings for movies. The system learns latent factors that represent user preferences and movie characteristics from historical rating data, then uses these factors to predict unknown ratings.
 
-## 📌 Overview
-This project implements Probabilistic Matrix Factorization (PMF) for collaborative filtering on the Netflix Prize dataset. The implementation includes three variants from the paper:
+The model is designed for large-scale, sparse datasets and scales linearly with the number of observations.
 
-1. **Basic PMF** - Standard matrix factorization with Gaussian priors
-2. **PMF with Adaptive Priors** - Automatic complexity control
-3. **Constrained PMF** - User features depend on movies they've rated
+---
 
-## 🎯 Key Results
+## What I Built
 
-| Model | Validation RMSE | Paper's RMSE | Difference |
-|-------|----------------|--------------|------------|
-| **PMF2 (Low Regularization)** | **0.9920** | 0.9253 | +0.0667 |
-| PMF1 (High Regularization) | 1.0114 | 0.9430 | +0.0684 |
-| Adaptive PMF | 1.0134 | 0.9197 | +0.0937 |
-| Constrained PMF | 1.0788 | 0.9016 | +0.1772 |
+### Three Model Variants Implemented
 
-### Key Finding
-PMF2 (low regularization) outperforms PMF1 (high regularization) - **matches paper's core finding**
+| Variant | Description |
+|---------|-------------|
+| **Basic PMF** | Standard matrix factorization with fixed regularization |
+| **PMF with Adaptive Priors** | Automatically adjusts regularization during training |
+| **Constrained PMF** | User features depend on which movies they rated |
 
-## 📊 Dataset Statistics
+### Key Features
 
-| Parameter | Value |
-|-----------|-------|
-| Total movies available | 17,770 |
-| Movies used in experiment | 1,500 |
-| Users sampled | 40,000 |
-| Training ratings | 1,824,946 |
-| Validation pairs (probe.txt) | 18,993 |
-| Data sparsity | ~97% |
+- Movie-by-movie data loading to handle large datasets without memory issues
+- Sparse matrix representation for efficient storage
+- Logistic function to bound predictions between 1 and 5 stars
+- Mini-batch Stochastic Gradient Descent with momentum for training
+- Validation using held-out probe.txt ratings
 
-## 🏗️ Project Structure
+---
+
+## Dataset Used
+
+### Netflix Prize Dataset
+
+| Aspect | Details |
+|--------|---------|
+| **Source** | Netflix Prize Competition (2006) |
+| **Total Movies** | 17,770 |
+| **Movies Used** | 1,500 |
+| **Total Users** | 480,189 |
+| **Users Sampled** | 40,000 |
+| **Total Ratings** | 100,480,507 |
+| **Ratings Used for Training** | 1,824,946 |
+| **Validation Pairs** | 18,993 |
+| **Data Sparsity** | ~97% |
+
+### Files Used
+
+| File | Purpose |
+|------|---------|
+| `training_set/` | 17,770 movie files containing user ratings |
+| `probe.txt` | Validation set - indicates which ratings to predict |
+| `movie_titles.txt` | Movie ID to title/year mapping |
+
+---
+
+## How It Works
+
+### Step 1: Data Loading
+
+The dataset contains one text file per movie. Each file contains:
+- First line: Movie ID
+- Following lines: User ID, Rating, Date
+
+The probe.txt file contains user-movie pairs reserved for validation. Ratings in probe.txt are held out; remaining ratings are used for training.
+
+### Step 2: Preprocessing
+
+- Ratings scaled from [1-5] to [0-1] using: `(rating - 1) / 4`
+- Users limited to 40,000 for memory efficiency
+- Movies limited to 1,500
+- Data stored in CSR sparse matrix format
+
+### Step 3: Matrix Factorization
+
+The model learns two matrices:
+- **U**: User latent factors (40,000 × 30)
+- **V**: Movie latent factors (1,500 × 30)
+
+Prediction formula:

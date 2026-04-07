@@ -84,7 +84,7 @@ I built a Probabilistic Matrix Factorization (PMF) system to predict user rating
 ---
 
 ## Project Structure
-
+```
 PMF_Netflix_Project/
 ├── README.md
 ├── requirements.txt
@@ -108,6 +108,7 @@ PMF_Netflix_Project/
 │   └── results_summary.csv
 └── Documents/
     └── Project_Report.docx
+```
 
 ---
 

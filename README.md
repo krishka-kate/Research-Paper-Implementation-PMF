@@ -49,6 +49,48 @@ I built a Probabilistic Matrix Factorization (PMF) system to predict user rating
 
 ---
 
+## Methodology
+
+### Stage 1: Data Loading
+
+I downloaded the Netflix Prize dataset which contains 100 million ratings from 480,189 users on 17,770 movies. The dataset is split into 17,770 text files, one per movie, each containing User ID, Rating, and Date. I also used the probe.txt file which contains 1.4 million user-movie pairs reserved for validation with their actual ratings withheld.
+
+### Stage 2: Data Preprocessing
+
+I loaded probe.txt first to identify validation pairs, then loaded movie files one by one to avoid memory crashes on a 16GB RAM system. For each rating, I checked if it existed in probe.txt — if yes, it went to the validation set; if no, it went to the training set. This ensures the model never sees validation ratings during training.
+
+Due to memory limitations, I used only 1,500 movies and 40,000 users. Ratings were scaled from the 1–5 range to 0–1 using the formula: scaled_rating = (rating - 1) / 4. Data was stored in CSR sparse matrix format to efficiently handle the ~97% sparsity.
+
+### Stage 3: Model Implementation
+
+**Basic PMF** learns two matrices: a user latent factor matrix of size 40,000 x 30 and a movie latent factor matrix of size 1,500 x 30. Predicted rating = sigmoid(user_vector dot movie_vector), scaled back to 1–5. L2 regularization prevents overfitting. Two versions were trained: PMF1 with high regularization and PMF2 with low regularization.
+
+**Adaptive Priors PMF** works like Basic PMF but automatically adjusts regularization every 25 epochs based on the magnitude of current vectors, smoothed to prevent sudden jumps.
+
+**Constrained PMF** builds the user vector from two parts: a user-specific offset vector plus the average of movie constraint vectors for all movies that user has rated. This helps generalize for users with very few ratings.
+
+### Stage 4: Training Process
+
+- All vectors initialized with random values from N(0, 0.01)
+- Trained for 50 epochs with batch size of 50,000
+- Optimizer: SGD with learning rate 0.05 and momentum 0.9
+- Ratings shuffled each epoch for randomness
+- Validation RMSE computed every 10 epochs on held-out probe.txt pairs
+
+### Stage 5: Evaluation
+
+Used Root Mean Squared Error (RMSE) — the same metric as the Netflix Prize competition. Lower RMSE = better performance. Netflix's own baseline score was 0.9514, meaning any model below this outperforms Netflix's own system.
+
+### Stage 6: Results Collection
+
+After training, validation RMSE values at each epoch were saved to CSV files. Five graphs were generated: a comparison of all four models, a replication of the paper's Figure 2 Left (PMF1, PMF2, Adaptive Priors), a replication of Figure 2 Right (Unconstrained vs Constrained PMF), a bar chart comparing my results to the paper, and learning curves showing training vs validation RMSE per model.
+
+### Stage 7: Analysis
+
+My best model (PMF2) achieved validation RMSE of 0.9920 vs the paper's 0.9253 on the full dataset. The gap of 0.0667 is explained by using a smaller dataset. Importantly, my results confirm the paper's core finding: low regularization (PMF2) outperforms high regularization (PMF1). Validation RMSE decreased consistently across all 50 epochs and the training-validation gap was healthy, showing good generalization without severe overfitting.
+
+---
+
 ## Results
 
 ### Final Validation RMSE
@@ -84,7 +126,7 @@ I built a Probabilistic Matrix Factorization (PMF) system to predict user rating
 ---
 
 ## Project Structure
-```
+
 PMF_Netflix_Project/
 ├── README.md
 ├── requirements.txt
@@ -108,7 +150,6 @@ PMF_Netflix_Project/
 │   └── results_summary.csv
 └── Documents/
     └── Project_Report.docx
-```
 
 ---
 

@@ -127,6 +127,7 @@ My best model (PMF2) achieved validation RMSE of 0.9920 vs the paper's 0.9253 on
 
 ## Project Structure
 
+```
 PMF_Netflix_Project/
 ├── README.md
 ├── requirements.txt
@@ -150,6 +151,7 @@ PMF_Netflix_Project/
 │   └── results_summary.csv
 └── Documents/
     └── Project_Report.docx
+```
 
 ---
 
